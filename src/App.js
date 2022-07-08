@@ -1,11 +1,32 @@
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import Home from "./routes/Home/home";
 import Navigation from "./routes/navigation/navigation.component";
-import { Routes, Route } from "react-router-dom";
 import Authetication from "./routes/authetication/authetication";
 import Shop from "./routes/shop/shop";
 import Checkout from "./routes/checkout/checkout";
+import {
+  onAuthStateChangedListener,
+  createUserDocFromAuth,
+} from "./utils/firebase/firebase";
+import { setCurrentUser } from "./store/user/user.action";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) {
+        createUserDocFromAuth(user);
+      }
+
+      dispatch(setCurrentUser(user));
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>

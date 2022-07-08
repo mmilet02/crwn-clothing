@@ -1,12 +1,13 @@
 import { useState } from "react";
+
 import {
-  createUserDocFromAuth,
   signInWithGooglePopup,
   signInAuthWithEmailAndPass,
 } from "../../utils/firebase/firebase";
 import FormInput from "../form-input/form-input";
-import "./sign-in-form.scss";
 import Button from "../button/button";
+
+import "./sign-in-form.scss";
 
 const defaultFormFields = {
   email: "",
@@ -34,7 +35,7 @@ const SignInForm = () => {
     e.preventDefault();
 
     try {
-      const response = await signInAuthWithEmailAndPass(email, password);
+      await signInAuthWithEmailAndPass(email, password);
       resetFormFields();
     } catch (error) {
       if (error.code === "auth/user-not-found") {
